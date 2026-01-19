@@ -129,10 +129,10 @@
                    Text="Пункт выдачи"
                    VerticalAlignment="Center"/>
 
-        <ComboBox Grid.Row="4"
+        <ComboBox Grid.Row="5"
           Grid.Column="1"
           Name="CBPickupPoint"
-          SelectedValuePath="PickupPointID" Margin="0,262,198,0" Grid.RowSpan="2">
+          SelectedValuePath="PickupPointID" VerticalAlignment="Top" Grid.RowSpan="2" Margin="0,-2,182,0">
 
             <ComboBox.ItemTemplate>
                 <DataTemplate>
