@@ -39,10 +39,10 @@ namespace Bashkircev41Size
                 switch (user.UserRole)
                 {
                     case 1:
-                        RoleIB.Text = "Клиент";
+                        RoleIB.Text = "Менеджер";
                         break;
                     case 2:
-                        RoleIB.Text = "Менеджер";
+                        RoleIB.Text = "Клиент";
                         break;
                     case 3:
                         RoleIB.Text = "Администратор";

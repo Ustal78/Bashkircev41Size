@@ -20,11 +20,11 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Логин:" VerticalAlignment="Center"></TextBlock>
-        <TextBox Grid.Row="0" Grid.Column="1" Name="TBLogin" VerticalAlignment="Center"></TextBox>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Логин:" VerticalAlignment="Center" FontSize="25"></TextBlock>
+        <TextBox Name="TBLogin" VerticalAlignment="Center" FontSize="25" Grid.ColumnSpan="2" Margin="253,0,195,0"/>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Пароль:" VerticalAlignment="Center"></TextBlock>
-        <PasswordBox Grid.Row="1" Grid.Column="1" Name="TBPassword" VerticalAlignment="Center"></PasswordBox>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Пароль:" VerticalAlignment="Center" FontSize="25"></TextBlock>
+        <PasswordBox Grid.Row="1" Name="TBPassword" VerticalAlignment="Center" FontSize="25" Grid.ColumnSpan="2" Margin="253,0,195,0"/>
 
         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
             <Button Name="LoginBtn" Content="Войти" Margin="0,0,10,0" Click="LoginBtn_Click"></Button>

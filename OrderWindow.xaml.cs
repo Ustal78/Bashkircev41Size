@@ -25,15 +25,13 @@ namespace Bashkircev41Size
         public OrderWindow(List<OrderProduct> orderProductList,User user)
         {
             InitializeComponent();
-            CBPickupPoint.ItemsSource = Bashkircev41Entities.GetContext().PickupPoint.ToList();
-
-            CBPickupPoint.DisplayMemberPath = "PickupStreet"; 
-            CBPickupPoint.SelectedValuePath = "PickupPointID";
-            OrderListView.ItemsSource = orderProductList;
             OrderProductList = orderProductList;
+            OrderListView.ItemsSource = OrderProductList;
+
             CurrentUser = user;
 
-            OrderListView.ItemsSource = OrderProductList;
+            CBPickupPoint.ItemsSource = Bashkircev41Entities.GetContext().PickupPoint.ToList();
+            CBPickupPoint.SelectedValuePath = "PickupPointID";
 
             OrderDate.SelectedDate = DateTime.Now;
             DeliveryDate.SelectedDate = GetDeliveryDate();
@@ -43,8 +41,12 @@ namespace Bashkircev41Size
             else
                 TBFIO.Text = "Гость";
 
-            CalculateTotal();
+            int nextOrderId =
+                (Bashkircev41Entities.GetContext().Order.Max(o => (int?)o.OrderID) ?? 0) + 1;
 
+            TBOrderNumber.Text = nextOrderId.ToString();
+
+            CalculateTotal();
 
         }
 
@@ -54,7 +56,10 @@ namespace Bashkircev41Size
 
             foreach (var item in OrderProductList)
             {
-                total += item.Product.ProductCost * item.Count;
+                if (item.Product != null)
+                {
+                    total += item.Product.ProductCost * item.Count;
+                }
             }
 
             TBTotal.Text = $"Итого: {total} руб.";
@@ -66,6 +71,9 @@ namespace Bashkircev41Size
 
             foreach (var item in OrderProductList)
             {
+                if (item.Product == null)
+                    continue;
+
                 if (item.Count > item.Product.ProductQuantityInStock)
                 {
                     isAvailable = false;
@@ -81,23 +89,21 @@ namespace Bashkircev41Size
 
         private void OrderBtn_Click(object sender, RoutedEventArgs e)
         {
-            DateTime deliveryDate = GetDeliveryDate();
+            if (CBPickupPoint.SelectedValue == null)
+            {
+                MessageBox.Show("Выберите пункт выдачи");
+                return;
+            }
 
             Order order = new Order();
             order.OrderDate = DateTime.Now;
-            order.OrderDeliveryDate = deliveryDate;
+            order.OrderDeliveryDate = GetDeliveryDate();
             order.OrderStatus = "Новый";
-
             order.OrderPickupPoint = (int)CBPickupPoint.SelectedValue;
-
             order.OrderPickupCode = new Random().Next(100, 999).ToString();
 
-
             if (CurrentUser != null)
-            {
                 order.OrderClientID = CurrentUser.UserID;
-            }
-
 
             Bashkircev41Entities.GetContext().Order.Add(order);
             Bashkircev41Entities.GetContext().SaveChanges();
@@ -110,15 +116,34 @@ namespace Bashkircev41Size
                 item.Product.ProductQuantityInStock -= item.Count;
             }
 
-
             Bashkircev41Entities.GetContext().SaveChanges();
-            TBOrderNumber.Text = order.OrderID.ToString();
-            MessageBox.Show("Заказ оформлен");
-            this.Close();
+
+            MessageBox.Show("Заказ успешно оформлен");
+            Close();
         }
 
+        private void Plus_Click(object sender, RoutedEventArgs e)
+        {
+            OrderProduct item = (sender as Button).DataContext as OrderProduct;
+            item.Count++;
+            OrderListView.Items.Refresh();
+            CalculateTotal();
+        }
 
+        private void Minus_Click(object sender, RoutedEventArgs e)
+        {
+            OrderProduct item = (sender as Button).DataContext as OrderProduct;
+
+            item.Count--;
+
+            if (item.Count <= 0)
+                OrderProductList.Remove(item);
+
+            OrderListView.Items.Refresh();
+            CalculateTotal();
+        }
     }
+
 
 
 }

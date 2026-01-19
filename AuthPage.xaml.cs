@@ -33,7 +33,7 @@ namespace Bashkircev41Size
             timer.Tick += Timer_Tick;
         }
 
-        int timeLeft = 30;
+        int timeLeft = 10;
 
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -123,7 +123,7 @@ namespace Bashkircev41Size
             if (countError >= 3)
             {
                 LoginBtn.IsEnabled = false;
-                timeLeft = 30;
+                timeLeft = 10;
                 timer.Start();
             }
 

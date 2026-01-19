@@ -41,32 +41,112 @@
         <TextBox Grid.Row="3" Grid.Column="1" Name="TBOrderNumber" IsReadOnly="True"/>
 
 
-        <ListView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
-                  Name="OrderListView"
-                  Margin="0,10,0,10">
+        <ListView Name="OrderListView"
+          Grid.Row="4"
+          Grid.ColumnSpan="2"
+          Margin="0,10,0,10">
 
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Товар"
-                                    DisplayMemberBinding="{Binding Product.ProductName}"
-                                    Width="300"/>
-                    <GridViewColumn Header="Цена"
-                                    DisplayMemberBinding="{Binding Product.ProductCost}"
-                                    Width="150"/>
-                    <GridViewColumn Header="Количество"
-                                    DisplayMemberBinding="{Binding Count}"
-                                    Width="150"/>
-                </GridView>
-            </ListView.View>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="10">
 
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Image Grid.RowSpan="4"
+                   Width="150"
+                   Height="150"
+                   Stretch="Uniform"
+                   HorizontalAlignment="Center">
+                            <Image.Source>
+                                <Binding Path="Product.ProductPhotoPath">
+                                    <Binding.TargetNullValue>
+                                        <ImageSource>/Res/picture.png</ImageSource>
+                                    </Binding.TargetNullValue>
+                                </Binding>
+                            </Image.Source>
+                        </Image>
+
+                        <TextBlock Grid.Column="1"
+                       Grid.Row="0"
+                       Text="{Binding Product.ProductName}"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       TextWrapping="Wrap"/>
+
+                        <TextBlock Grid.Column="1"
+                       Grid.Row="1"
+                       Text="{Binding Product.ProductDescription}"
+                       TextWrapping="Wrap"/>
+
+                        <TextBlock Grid.Column="1"
+                       Grid.Row="2"
+                       Text="{Binding Product.ProductCost, StringFormat='{}{0} руб.'}"
+                       FontSize="16"/>
+
+                        <StackPanel Grid.Column="1"
+                        Grid.Row="3"
+                        Orientation="Horizontal"
+                        Margin="0,5,0,0">
+
+                            <Button Content="−" Width="30" Click="Minus_Click"/>
+
+                            <TextBlock Text="{Binding Count}" FontSize="16" Margin="10,0" VerticalAlignment="Center"/>
+
+                            <Button Content="+" Width="30" Click="Plus_Click"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2"
+                        Grid.RowSpan="4"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+
+                            <TextBlock Text="Скидка"
+                           FontSize="14"
+                           HorizontalAlignment="Center"/>
+
+                            <TextBlock Text="{Binding Product.ProductDiscountAmount, StringFormat='{}{0}%'}"
+                           FontSize="24"
+                           HorizontalAlignment="Center"/>
+                        </StackPanel>
+
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
 
         <TextBlock Grid.Row="5" Grid.Column="0"
                    Text="Пункт выдачи"
                    VerticalAlignment="Center"/>
 
-        <ComboBox Grid.Row="5" Grid.Column="1"
-                  Name="CBPickupPoint"/>
+        <ComboBox Grid.Row="4"
+          Grid.Column="1"
+          Name="CBPickupPoint"
+          SelectedValuePath="PickupPointID" Margin="0,262,198,0" Grid.RowSpan="2">
+
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                <Run Text="{Binding PickupPointCity}"/>
+                <Run Text=", "/>
+                <Run Text="{Binding PickupStreet}"/>
+                <Run Text=", д. "/>
+                <Run Text="{Binding PickupPointHome}"/>
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+
+        </ComboBox>
 
         <Button Grid.Row="6" Grid.Column="1"
                 Name="OrderBtn"
